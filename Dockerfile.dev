@@ -1,0 +1,19 @@
+FROM golang:1.19-alpine
+
+# git
+RUN apk update && \
+    apk add --no-cache \
+    alpine-sdk \
+    git
+
+ARG GROUP_ID
+ARG GROUP_NAME
+ARG USER_ID
+ARG USER_NAME
+
+WORKDIR /go/src/github.com/yaroyan/gms/authentication
+
+RUN addgroup -S -g ${GROUP_ID} ${GROUP_NAME} && \
+    adduser -u ${USER_ID} -S ${USER_NAME} -G ${GROUP_NAME} -D ${USER_NAME} -s /bin/ash && \
+    chown ${USER_NAME}:${GROUP_NAME} -R /home/${USER_NAME}/ && \
+    chown ${USER_NAME}:${GROUP_NAME} -R /go
